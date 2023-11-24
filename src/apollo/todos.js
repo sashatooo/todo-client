@@ -49,8 +49,8 @@ export const ADD_TASK = gql`
 `;
 
 export const GET_TASK_BYID_TODO = gql`
-  query getTasksByTodoId($id: ID) {
-    tasks: tasksByTodolistId(id: $id) {
+  query getTasksByTodoId($id: ID, $filter: String) {
+    tasks: tasksByTodolistId(id: $id, filter: $filter) {
       id
       title
       isDone
@@ -58,12 +58,43 @@ export const GET_TASK_BYID_TODO = gql`
   }
 `;
 
+// -----------------------
+
 export const UPDATE_TASK_STATUS = gql`
   mutation ChandgeTaskStatus($id: ID!, $isDone: Boolean) {
     updateTask(id: $id, isDone: $isDone) {
       id
       title
       isDone
+    }
+  }
+`;
+
+export const UPDATE_TASK_TITLE = gql`
+  mutation ChandgeTaskStatus($id: ID!, $title: String) {
+    updateTask(id: $id, title: $title) {
+      id
+      title
+      isDone
+    }
+  }
+`;
+
+// -------------------------
+
+export const REMOVE_TASK = gql`
+  mutation removeTask($id: ID) {
+    deleteTask(id: $id) {
+      id
+    }
+  }
+`;
+
+export const CHANGE_TODOLIST_FILTER= gql`
+  mutation ChangeTodolistFilter($id: ID, $filter: String) {
+    updateTodolist(id: $id, filter: $filter) {
+      id
+      filter
     }
   }
 `;
