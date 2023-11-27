@@ -1,5 +1,15 @@
 import { gql } from "@apollo/client";
 
+export const ADD_TODOLIST = gql`
+  mutation AddNewTodoList($title: String!) {
+    addTodolist(title: $title) {
+      id
+      title
+      filter
+    }
+  }
+`;
+
 export const ALL_TODOLISTS = gql`
   query AllTdolists {
     todolists {
@@ -20,18 +30,18 @@ export const UPDATE_TODOLIST_TITLE = gql`
   }
 `;
 
-export const ADD_TODOLIST = gql`
-  mutation AddTodolist($title: String!, $filter: String!) {
-    addTodolist(title: $title, filter: $filter) {
-      id
-      title
-      filter
-    }
-  }
-`;
+// export const ADD_TODOLIST = gql`
+//   mutation AddTodolist($title: String!, $filter: String!) {
+//     addTodolist(title: $title, filter: $filter) {
+//       id
+//       title
+//       filter
+//     }
+//   }
+// `;
 
 export const REMOVE_TODOLIST = gql`
-  mutation AddTodolist($id: ID) {
+  mutation removeTodolist($id: ID) {
     deleteTodolist(id: $id) {
       id
     }
@@ -90,7 +100,7 @@ export const REMOVE_TASK = gql`
   }
 `;
 
-export const CHANGE_TODOLIST_FILTER= gql`
+export const CHANGE_TODOLIST_FILTER = gql`
   mutation ChangeTodolistFilter($id: ID, $filter: String) {
     updateTodolist(id: $id, filter: $filter) {
       id

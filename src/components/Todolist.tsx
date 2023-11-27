@@ -2,8 +2,12 @@ import { ChangeEvent, useState } from "react"
 import { AddItemForm } from "./common/AddItemForm"
 import { FilterValuesType } from "./App"
 import { EditableSpan } from "./common/EditableSpan"
-import { useQuery } from "@apollo/client"
-import { GET_TASK_BYID_TODO } from "../apollo/todos"
+import { useMutation, useQuery } from "@apollo/client"
+import { ADD_TASK, ALL_TODOLISTS, CHANGE_TODOLIST_FILTER, GET_TASK_BYID_TODO, REMOVE_TASK } from "../apollo/todos"
+import { Button, Checkbox, IconButton } from "@mui/material"
+import { Delete } from "@mui/icons-material"
+
+import  styles  from "../styles/Todolist.module.css"
 
 export type TaskType = {
 	id: string
@@ -16,9 +20,9 @@ type PropsType = {
 	title: string
 	// tasks: Array<TaskType>
 	filter: FilterValuesType
-	removeTask: (id: string) => void
-	changeFilter: (todoListId: string, value: FilterValuesType) => void
-	addTask: (title: string, todoListId: string) => void
+	// removeTask: (id: string) => void
+	// changeFilter: (todoListId: string, value: FilterValuesType) => void
+	// addTask: (title: string, todoListId: string) => void
 	chandgeTaskStatus: (taskId: string, isDone: boolean) => void
 	removeTodoList: (todoListId: string) => void
 	chandgeTodoListTitle: (title: string, todoListId: string) => void
@@ -27,25 +31,60 @@ type PropsType = {
 
 export function Todolist(props: PropsType) {
 
-	
+
 	// const [taskFilter, setTaskFilter] = useState(props.filter)
 	
 	const { loading, error, data } = useQuery(GET_TASK_BYID_TODO, {variables:  {id: props.id ,filter: props.filter}});
+	const [chandgeTodolistFilter, {loading: CTLFloading, error: CTLFerorr, data: CTLFdata}] = useMutation(CHANGE_TODOLIST_FILTER)
+	const [addNewTask, {loading: ANTloading, error: ANTerorr, data: ANTdata}] = useMutation(ADD_TASK, {
+		refetchQueries: [ {query: GET_TASK_BYID_TODO, variables:{id: props.id ,filter: props.filter} } ]
+	})
+	const [deleteTask, {loading: DTloading, error: DTerorr, data: DTdata}] = useMutation(REMOVE_TASK, {
+		refetchQueries: [{query: GET_TASK_BYID_TODO, variables:{id: props.id ,filter: props.filter} }]
+	})
 
-	
+
+	console.log('render TodoList', props.title, data, props.filter)	
+
+	function changeFilter(id: string, filter: FilterValuesType) {
+		chandgeTodolistFilter({
+		  variables: {
+			id,
+			filter
+		  }
+		})
+	  } 
+
+	  function addNTask(title: string, todoListId: string) {
+		addNewTask({
+		  variables: {
+			title: title,
+			isDone: false,
+			todolistId: todoListId
+		  }
+		})
+	  }
+
+	  function removeTask(id: string) {
+		deleteTask({
+		  variables: {
+			id,
+		  }
+		})
+	  }
 
 
 
 	const onAllClickHendler = () => {
-		props.changeFilter(props.id, "all")
+		changeFilter(props.id, "all")
 		// setTaskFilter("all")
 	}
 	const onComplitedClickHendler = () => {
-		props.changeFilter(props.id, "complited")
+		changeFilter(props.id, "complited")
 		// setTaskFilter("complited")
 	}
 	const onActiveClickHendler = () => {
-		props.changeFilter(props.id, "active")
+		changeFilter(props.id, "active")
 		// setTaskFilter("active")
 	}
 	
@@ -55,7 +94,7 @@ export function Todolist(props: PropsType) {
 
 
 	function addTask(title: string) {
-		props.addTask(title, props.id)
+		addNTask(title, props.id)
 	}
 
 
@@ -64,29 +103,44 @@ export function Todolist(props: PropsType) {
 		<div>
 			<h3>
 				<EditableSpan title={props.title} chandgeTitle={chandgeTodoListTitle}/>
-				<button onClick={onClickHendler}>X</button>
+				<IconButton onClick={onClickHendler}>
+					<Delete />
+				</IconButton>
 			</h3>
-			<AddItemForm addItem={addTask} />
-			<ul>
+			<AddItemForm addItem={addTask} value={'Enter task title'}/>
+			<div className={styles.tasklist}>
 				{data?.tasks.map((t: any) => {
 					
 					const onChandgeHengler = (e: ChangeEvent<HTMLInputElement>) => {props.chandgeTaskStatus(t.id, e.currentTarget.checked)}
 					const chandgeTaskTitleHendler = (title: string) => {props.chandgeTaskTitle(t.id, title) }
-					const onremoveHendler = () => {props.removeTask(t.id)}
+					const onremoveHendler = () => {removeTask(t.id)}
 
 					return (
-						<li key={t.id} className={t.isDone ? "is-done" : ""}>
-							<input type="checkbox" checked={t.isDone} onChange={onChandgeHengler}/>
+						<div key={t.id} className={t.isDone ? "is-done" : ""}>
+							<Checkbox checked={t.isDone} onChange={onChandgeHengler}/>
 							<EditableSpan title={t.title} chandgeTitle={chandgeTaskTitleHendler}/>
-							<button onClick={onremoveHendler}>x </button>
-						</li>
+							<IconButton onClick={onremoveHendler}>
+								<Delete />
+							</IconButton>
+						</div>
 					)} 
 				)}
-			</ul>
+			</div>
 			<div>
-				<button className={props.filter === "all" ? "active-filter" : ""} onClick={onAllClickHendler}>all</button>
-				<button className={props.filter === "complited" ? "active-filter" : ""} onClick={onComplitedClickHendler}>active</button>
-				<button className={props.filter === "active" ? "active-filter" : ""} onClick={onActiveClickHendler}>complited</button>
+				<Button 
+					variant={props.filter === "all" ? "contained" : "text"} 
+					onClick={onAllClickHendler}>
+					all</Button>
+				<Button 
+					color={'primary'} 
+					variant={props.filter === "complited" ? "contained" : "text"} 
+					onClick={onComplitedClickHendler}>
+					active</Button>
+				<Button
+					color={'secondary'} 
+					variant={props.filter === "active" ? "contained" : "text"} 
+					onClick={onActiveClickHendler}>
+					complited</Button>
 			</div>
 		</div>
 	)
