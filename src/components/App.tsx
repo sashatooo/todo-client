@@ -115,11 +115,13 @@ function chandgeTaskStatus(id: string, title: string, isDone: boolean, todoListI
   })
 }
 
-function chandgeTaskTitle(id: string, title: string) {
+function chandgeTaskTitle(id: string, title: string, isDone: boolean, todoListId: string) {
   updateTaskTitle({
     variables: {
-      id,
+      id: id,
       title: title,
+      isDone: isDone,
+      todolistId: todoListId
     }
   })
 }

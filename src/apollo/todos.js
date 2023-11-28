@@ -80,11 +80,10 @@ export const UPDATE_TASK_STATUS = gql`
 `;
 
 export const UPDATE_TASK_TITLE = gql`
-  mutation ChandgeTaskStatus($id: ID!, $title: String) {
-    updateTask(id: $id, title: $title) {
+  mutation ChandgeTaskStatus($id: ID!, $title: String!, $isDone: Boolean!, $todolistId: String!) {
+    updateTask(id: $id, title: $title, isDone: $isDone, todolistId: $todolistId) {
       id
       title
-      isDone
     }
   }
 `;
