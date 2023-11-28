@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ADD_TASK, ADD_TODOLIST, ALL_TODOLISTS, CHANGE_TODOLIST_FILTER, GET_TASK_BYID_TODO, REMOVE_TASK, REMOVE_TODOLIST, UPDATE_TASK_STATUS, UPDATE_TASK_TITLE, UPDATE_TODOLIST_TITLE } from "../apollo/todos";
 import { Todolist } from "./Todolist";
 import { useEffect, useState } from "react";
-import { AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, CircularProgress, Container, Grid, IconButton, LinearProgress, Paper, Toolbar, Typography } from "@mui/material";
 import { Menu } from "@mui/icons-material";
 
 export type FilterValuesType = "all" | "complited" | "active";
@@ -65,7 +65,9 @@ function App() {
 
 
 if(loading) {
-  return <div>Loading...</div>
+  return (      <Box sx={{ width: '100%' }}>
+                  <LinearProgress />
+                </Box>)
 }
 if(error) {
   return <div>Error!!!</div>
