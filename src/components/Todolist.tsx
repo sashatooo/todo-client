@@ -23,7 +23,7 @@ type PropsType = {
 	// removeTask: (id: string) => void
 	// changeFilter: (todoListId: string, value: FilterValuesType) => void
 	// addTask: (title: string, todoListId: string) => void
-	chandgeTaskStatus: (taskId: string, isDone: boolean) => void
+	chandgeTaskStatus: (id: string, title: string, isDone: boolean, todoListId: string) => void
 	removeTodoList: (todoListId: string) => void
 	chandgeTodoListTitle: (title: string, todoListId: string) => void
 	chandgeTaskTitle: (taskId: string, title: string) => void
@@ -111,7 +111,7 @@ export function Todolist(props: PropsType) {
 			<div className={styles.tasklist}>
 				{data?.tasks.map((t: any) => {
 					
-					const onChandgeHengler = (e: ChangeEvent<HTMLInputElement>) => {props.chandgeTaskStatus(t.id, e.currentTarget.checked)}
+					const onChandgeHengler = (e: ChangeEvent<HTMLInputElement>) => {props.chandgeTaskStatus(t.id, t.title, e.currentTarget.checked, t.todolistId)}
 					const chandgeTaskTitleHendler = (title: string) => {props.chandgeTaskTitle(t.id, title) }
 					const onremoveHendler = () => {removeTask(t.id)}
 

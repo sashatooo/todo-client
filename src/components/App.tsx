@@ -104,11 +104,13 @@ function addNewTodolist(title: string) {
 
 // ---------------
 
-function chandgeTaskStatus(id: string, isDone: boolean) {
+function chandgeTaskStatus(id: string, title: string, isDone: boolean, todoListId: string) {
   updateTaskStatus({
     variables: {
       id: id,
+      title: title,
       isDone: isDone,
+      todoListId: todoListId
     }
   })
 }
