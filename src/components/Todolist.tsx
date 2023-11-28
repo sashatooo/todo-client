@@ -111,7 +111,7 @@ export function Todolist(props: PropsType) {
 			<div className={styles.tasklist}>
 				{data?.tasks.map((t: any) => {
 					
-					const onChandgeHengler = (e: ChangeEvent<HTMLInputElement>) => {props.chandgeTaskStatus(t.id, t.title, e.currentTarget.checked, t.todolistId)}
+					const onChandgeHengler = (e: ChangeEvent<HTMLInputElement>) => {props.chandgeTaskStatus(t.id, t.title, e.currentTarget.checked, props.id)}
 					const chandgeTaskTitleHendler = (title: string) => {props.chandgeTaskTitle(t.id, title) }
 					const onremoveHendler = () => {removeTask(t.id)}
 

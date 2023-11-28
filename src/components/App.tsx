@@ -110,7 +110,7 @@ function chandgeTaskStatus(id: string, title: string, isDone: boolean, todoListI
       id: id,
       title: title,
       isDone: isDone,
-      todoListId: todoListId
+      todolistId: todoListId
     }
   })
 }
