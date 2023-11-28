@@ -25,7 +25,7 @@ type PropsType = {
 	// addTask: (title: string, todoListId: string) => void
 	chandgeTaskStatus: (id: string, title: string, isDone: boolean, todoListId: string) => void
 	removeTodoList: (todoListId: string) => void
-	chandgeTodoListTitle: (title: string, todoListId: string) => void
+	chandgeTodoListTitle: (title: string, todoListId: string, filter: FilterValuesType) => void
 	chandgeTaskTitle: (id: string, title: string, isDone: boolean, todoListId: string) => void
 }
 
@@ -46,12 +46,13 @@ export function Todolist(props: PropsType) {
 
 	console.log('render TodoList', props.title, data, props.filter)	
 
-	function changeFilter(id: string, filter: FilterValuesType) {
+	function changeFilter(todoListId: string, title: string, filter: FilterValuesType) {
 		chandgeTodolistFilter({
-		  variables: {
-			id,
-			filter
-		  }
+		variables: {
+			id: todoListId,
+			title: title,
+			filter: filter
+			}
 		})
 	  } 
 
@@ -76,20 +77,20 @@ export function Todolist(props: PropsType) {
 
 
 	const onAllClickHendler = () => {
-		changeFilter(props.id, "all")
+		changeFilter(props.id, props.title, "all")
 		// setTaskFilter("all")
 	}
 	const onComplitedClickHendler = () => {
-		changeFilter(props.id, "complited")
+		changeFilter(props.id, props.title, "complited")
 		// setTaskFilter("complited")
 	}
 	const onActiveClickHendler = () => {
-		changeFilter(props.id, "active")
+		changeFilter(props.id, props.title, "active")
 		// setTaskFilter("active")
 	}
 	
 	const onClickHendler = () => {props.removeTodoList(props.id)}
-	const chandgeTodoListTitle = (title: string) => {props.chandgeTodoListTitle(title, props.id)}
+	const chandgeTodoListTitle = (title: string) => {props.chandgeTodoListTitle(props.id, title, props.filter)}
 
 
 

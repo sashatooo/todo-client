@@ -21,8 +21,18 @@ export const ALL_TODOLISTS = gql`
 `;
 
 export const UPDATE_TODOLIST_TITLE = gql`
-  mutation updateTodolistTitle($id: ID, $title: String) {
-    updateTodolist(id: $id, title: $title) {
+  mutation updateTodolistTitle($id: ID!, $title: String!, $filter:String!) {
+    updateTodolist(id: $id, title: $title, filter:$filter) {
+      id
+      title
+      filter
+    }
+  }
+`;
+
+export const CHANGE_TODOLIST_FILTER = gql`
+  mutation updateTodolistTitle($id: ID!, $title: String!, $filter:String!) {
+    updateTodolist(id: $id, title: $title, filter:$filter) {
       id
       title
       filter
@@ -98,14 +108,7 @@ export const REMOVE_TASK = gql`
   }
 `;
 
-export const CHANGE_TODOLIST_FILTER = gql`
-  mutation ChangeTodolistFilter($id: ID, $filter: String) {
-    updateTodolist(id: $id, filter: $filter) {
-      id
-      filter
-    }
-  }
-`;
+
 
 // export const ADD_TODO = gql`
 //   mutation AddTodo($title:String!, $userId: ID!, $completed:Boolean!){

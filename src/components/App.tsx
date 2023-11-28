@@ -81,11 +81,12 @@ function removeTodoList(todoListId: string) {
   })
 }
 
-function chandgeTodoListTitle(title: string, todoListId: string) {
+function chandgeTodoListTitle(todoListId: string, title: string, filter: FilterValuesType) {
   updateTodoListTitle({
     variables: {
       id: todoListId,
-      title: title
+      title: title,
+      filter: filter
     }
   })
 }
